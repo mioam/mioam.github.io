@@ -43,7 +43,7 @@ import gfm from '@bytemd/plugin-gfm'
 import { Editor, Viewer } from '@bytemd/vue-next'
 import 'bytemd/dist/index.css'
 
-import { getPost } from '@/api/Post'
+import { getPost } from '@/api/post'
 import AutoBreadcrumb from '@/components/AutoBreadcrumb.vue'
 
 const plugins = [

@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const router = useRouter()
 
 // 自动生成面包屑数据
 const breadcrumbs = computed(() => {
@@ -27,7 +26,7 @@ const breadcrumbs = computed(() => {
 
 <template>
     <el-breadcrumb separator="/">
-        <el-breadcrumb-item v-for="(item, index) in breadcrumbs" :key="item.path"
+        <el-breadcrumb-item v-for="(item, _) in breadcrumbs" :key="item.path"
             :to="item.isClickable ? { path: item.path } : undefined">
             {{ item.title }}
         </el-breadcrumb-item>
