@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>页面重定向中...</title>
+    <meta name="robots" content="noindex">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <script>
+        // GitHub Pages SPA 路由重定向解决方案
+        (function() {
+            // 关键参数：不使用自定义域名填 1，使用自定义域名填 0
+            var pathSegmentsToKeep = 1; 
+            
+            var l = window.location;
+            var segments = l.pathname.split('/');
+            
+            // 构建重定向URL (例如: /?/article/123)
+            var redirect = l.protocol + '//' + l.hostname + 
+                          (l.port ? ':' + l.port : '') + 
+                          '/' + segments.slice(0, 1 + pathSegmentsToKeep).join('/') + 
+                          '/?/' + 
+                          segments.slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') + 
+                          (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') + 
+                          l.hash;
+
+            // 立即重定向，不留历史记录
+            l.replace(redirect);
+        })();
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>页面加载中...</h2>
+        <div class="spinner"></div>
+        <p>正在为您跳转到正确的页面，请稍候...</p>
+        <p>如果页面没有自动跳转，请 <a href="/你的仓库名/">点击这里</a> 返回首页</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+import axios, { isCancel, AxiosError } from 'axios';
+
+const api = axios.create({
+    baseURL: 'http://localhost:8080',
+    timeout: 5000,
+});
+
+export async function getPost(filename: string) {
+    const { data } = await api.get(`/static/${filename}`);
+    return data;
+}
