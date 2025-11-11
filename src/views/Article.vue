@@ -9,24 +9,7 @@
         </div>
 
         <div class="main">
-            <!-- <RouterView /> -->
-            <el-card>
-                <template #header>
-                    <div class="card-header" style="display: flex;justify-content: space-between">
-                        <h1 style="margin: 0;">这是一个标题</h1>
-
-                        <el-button type="" :icon="Edit" link />
-                    </div>
-                </template>
-
-                <Viewer :value="value" :plugins="plugins" @change="handleChange" />
-                <!-- {{ value }} -->
-                <template #footer>
-                    <div class="card-footer">
-                        footer
-                    </div>
-                </template>
-            </el-card>
+            <RouterView />
         </div>
     </div>
 </template>
@@ -34,7 +17,7 @@
 <script setup>
 import { Expand, Fold, Edit, ArrowLeft } from '@element-plus/icons-vue'
 
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 // 侧边栏开关
 const isCollapse = ref(false)
@@ -50,19 +33,9 @@ const plugins = [
     gfm(),
     // Add more plugins here
 ]
-
-const value = ref('')
 const route = useRoute()
 const router = useRouter()
 
-onMounted(async () => {
-    const res = await getPost('题单.md')
-    value.value = res
-})
-
-const handleChange = (v) => {
-    value.value = v
-}
 const back = () => {
     const segments = route.path.split('/').filter(Boolean)
     segments.pop()
@@ -91,6 +64,7 @@ const back = () => {
 
 .header div {
     /* display: flex; */
+    overflow: hidden;
     width: 100vw;
     max-width: 1280px;
 

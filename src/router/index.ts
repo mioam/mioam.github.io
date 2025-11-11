@@ -31,14 +31,12 @@ export const constantRoutes = [
                 children: [
                     {
                         path: '',
-                        component: Article,
                         name: 'Articles',
-                        // component: () => import('@/views/Articles.vue'),
+                        component: () => import('@/components/List.vue'),
                     },
                     {
                         path: ':id',
-                        component: Article,
-                        // component: () => import('@/views/ArticleDetail.vue'),
+                        component: () => import('@/components/Post.vue'),
                         meta: {
                             breadcrumb: (route: any) => `${route.params.id}` // 动态面包屑
                         }
