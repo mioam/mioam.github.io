@@ -56,7 +56,7 @@ const route = useRoute()
 const router = useRouter()
 
 onMounted(async () => {
-    const res = await getPost('a.md')
+    const res = await getPost('题单.md')
     value.value = res
 })
 
