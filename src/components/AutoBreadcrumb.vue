@@ -36,13 +36,52 @@ const breadcrumbs = computed(() => {
 </script>
 
 <template>
-  <el-breadcrumb separator="/">
-    <el-breadcrumb-item
-      v-for="item in breadcrumbs"
-      :key="item.path"
-      :to="item.isLast ? undefined : { path: item.path }"
-    >
-      {{ item.title }}
-    </el-breadcrumb-item>
-  </el-breadcrumb>
+  <nav class="auto-breadcrumb" aria-label="Breadcrumb">
+    <ol>
+      <li v-for="item in breadcrumbs" :key="item.path">
+        <RouterLink v-if="!item.isLast" :to="{ path: item.path }">
+          {{ item.title }}
+        </RouterLink>
+        <span v-else aria-current="page">{{ item.title }}</span>
+        <span v-if="!item.isLast" class="separator" aria-hidden="true">/</span>
+      </li>
+    </ol>
+  </nav>
 </template>
+
+<style scoped>
+.auto-breadcrumb {
+  min-width: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.auto-breadcrumb ol,
+.auto-breadcrumb li {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.auto-breadcrumb ol {
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.auto-breadcrumb li {
+  gap: 0.35rem;
+}
+
+.auto-breadcrumb a,
+.auto-breadcrumb span[aria-current="page"] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.auto-breadcrumb span[aria-current="page"] {
+  color: var(--accent);
+}
+</style>

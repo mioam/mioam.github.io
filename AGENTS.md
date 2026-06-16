@@ -11,7 +11,7 @@
 - 前端视觉保持克制、简洁、易修改。
 - 用插件架构承载可选功能。
 - 支持 GitHub Pages 静态部署。
-- 从 Markdown 文件读取博客文章。
+- 博客文章目前从一个远程静态 API 读取。
 - 通过 GitHub Contents API 保存博客编辑结果。
 
 ## 常用命令
@@ -78,14 +78,14 @@ src/plugins/<plugin-name>/
 
 - 所有有效内容默认位于居中的 `1024px` 主区域内。
 - 主舞台变量是 `--stage-width`。
-- 正文阅读宽度变量是 `--content-width`。
-- 浮动目录轨道变量是 `--rail-width`。
 
 组件命名前缀使用 `Mi`，表示 minimal/simple。
 
 当前已有视觉组件：
 
 - `src/components/mi/MiCard.vue`
+- `src/components/mi/MiList.vue`
+- `src/components/mi/MiThemeButton.vue`
 
 卡片规则：
 
@@ -157,31 +157,37 @@ src/styles/main.css
 
 ## 博客约定
 
-博客源文件放在：
+博客数据源使用远程静态 API，逻辑位于：
 
 ```text
-src/content/posts/*.md
+src/api/post.ts
 ```
 
-博客读取逻辑位于：
+它通过 axios 请求远程静态站点，默认读取：
+
+- 文章列表：`/file_list.json`
+- 单篇文章：`/md/<slug>.md`
+
+远程数据源是当前架构的** intentional 选择**，不要改成本地 `src/content/posts/*.md`，除非用户明确要求。
+
+远程站点的 baseURL 当前以常量形式硬编码在 `src/api/post.ts` 中。这是一个刻意的务实选择：静态站点没有运行时配置能力，引入 env/JSON 配置层目前收益不大。如果需要更换远程源，直接修改该常量后重新构建。
+
+Markdown 解析和 frontmatter 提取目前内联在：
 
 ```text
 src/plugins/blog/source.ts
 ```
 
-Markdown frontmatter 解析和序列化位于：
+它使用 `unified` + `remark` + `rehype` 管线，支持 GFM、KaTeX 数学公式、Shiki 代码高亮。
+
+以下文件目前**不存在**，不要假设它们已经实现：
 
 ```text
 src/shared/markdown/frontmatter.ts
-```
-
-文章页目录从 Markdown 的 `h2`、`h3` 生成，工具位于：
-
-```text
 src/shared/markdown/toc.ts
 ```
 
-兼容旧路径的 `src/api/post.ts` 只做 re-export，不要重新堆业务逻辑。
+文章页目录（TOC）和 frontmatter 序列化也尚未实现。
 
 ## GitHub 编辑
 
@@ -202,15 +208,11 @@ src/shared/github/contentApi.ts
 
 token 由用户手动提供，默认只保存在 `sessionStorage`。除非用户明确要求，不要引入 OAuth 或后端鉴权流程。
 
+`src/plugins/blog/views/BlogEditorView.vue` 当前是空壳，保存流程还未接入。
+
 ## TypeScript
 
 保持 TypeScript strict。
-
-完成改动前运行：
-
-```bash
-pnpm build
-```
 
 插件、博客、API 边界优先使用显式 interface/type。
 
@@ -222,7 +224,7 @@ pnpm build
 
 - Vue
 - Vue Router
-- 现有 Element Plus 组件
+- 现有组件
 - 现有 shared 工具
 - 原生 TypeScript
 
@@ -236,3 +238,12 @@ pnpm build
 - `dist/`
 
 这些已经由 `.gitignore` 忽略。
+
+## 当前已知的技术债（需要后续处理）
+
+1. `src/api/post.ts` 已删除 `console.log` 并修正 `FileInfo.date` 类型为 `string`。baseURL 保持硬编码常量，这是当前选定的方案。
+2. `src/plugins/blog/source.ts` 把解析、frontmatter、阅读时间混在一个文件里；输出 HTML 未做 sanitize；返回的 `PostDetail` 缺少 `description`/`tags`/`sourcePath`。
+3. `src/plugins/blog/views/BlogPostView.vue` 直接用 `v-html` 注入未消毒的 HTML；`!post` 同时覆盖了 loading 和 404 状态。
+4. `src/components/mi/MiList.vue` 命名、CSS 类、slot、emit 不一致，且没有使用语义化的列表标签。
+5. `src/plugins/blog/views/BlogEditorView.vue` 是空的，编辑/新建功能未实现。
+6. `src/styles/main.css` 中 `* { transition: var(--theme-transition); }` 范围过大，容易引起性能抖动。

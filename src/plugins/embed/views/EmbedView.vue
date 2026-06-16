@@ -18,3 +18,9 @@ const url = ref('')
     </div>
   </MiCard>
 </template>
+
+<style scoped>
+.embed-frame {
+  width: 100%;
+  min-height: 70vh;}
+</style>

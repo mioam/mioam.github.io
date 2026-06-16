@@ -1,34 +1,53 @@
 <script setup lang="ts">
 import MiCard from '@/components/mi/MiCard.vue'
-import { getPostSummariesSync } from '../source'
+import { getList } from '@/api/post'
+import type { FileInfo } from '@/api/post'
+import MiList from '@/components/mi/MiList.vue'
+import { onMounted, ref } from 'vue'
 
-const posts = getPostSummariesSync()
+
+const posts = ref<FileInfo[]>([])
+
+onMounted(async () => {
+  posts.value = await getList()
+  console.log(posts)
+})
 </script>
 
 <template>
   <MiCard class="page">
-    <div class="section-head">
-      <div>
-        <p class="eyebrow">Blog</p>
-        <h1>文章</h1>
-      </div>
+    <template #label>
+      Blog
+    </template>
+    <template #heading>
+      文章
+    </template>
+    <template #actions>
       <RouterLink class="text-action" to="/blog/new">写文章</RouterLink>
-    </div>
+    </template>
 
     <el-empty v-if="posts.length === 0" description="还没有文章。" />
-
-    <ul v-else class="post-list">
-      <li v-for="post in posts" :key="post.slug" class="post-list-item">
-        <RouterLink class="post-link" :to="`/blog/${post.slug}`">
-          <h2>{{ post.title }}</h2>
-          <p class="muted">{{ post.description }}</p>
-          <div class="meta cluster">
-            <span>{{ post.date }}</span>
-            <span>{{ post.readingTime }}</span>
-            <span v-if="post.draft">draft</span>
+    <MiList :items="posts">
+      <template #default="{ item }">
+        <RouterLink class="post-link" :to="`/blog/${item.slug}`">
+          <h2 class="title">{{ item.title }}</h2>
+          <p class="muted">{{ item.summary }}</p>
+          <div class="muted meta">
+            <span>{{ item.date }}</span>
           </div>
         </RouterLink>
-      </li>
-    </ul>
+      </template>
+    </MiList>
+
   </MiCard>
 </template>
+
+<style scoped>
+.post-link:hover>.title {
+  color: var(--accent);
+}
+
+.muted {
+  color: var(--muted);
+}
+</style>
