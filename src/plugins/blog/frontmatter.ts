@@ -14,8 +14,6 @@ export function extractFrontmatter() {
       (node): node is { type: 'yaml'; value: string } => node.type === 'yaml'
     )
 
-    file.data.frontmatter = yamlNode
-      ? (YAML.parse(yamlNode.value) as PostFrontmatter)
-      : {}
+    file.data.frontmatter = yamlNode ? (YAML.parse(yamlNode.value) as PostFrontmatter) : {}
   }
 }

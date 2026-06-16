@@ -5,6 +5,6 @@ import type { AppPlugin, NavItem } from './plugin'
 
 export const plugins: AppPlugin[] = [blogPlugin, gamesPlugin, embedPlugin]
 
-export const pluginRoutes = plugins.flatMap(plugin => plugin.routes)
+export const pluginRoutes = plugins.flatMap((plugin) => plugin.routes)
 
-export const navItems: NavItem[] = plugins.flatMap(plugin => plugin.navItems ?? [])
+export const navItems: NavItem[] = plugins.flatMap((plugin) => plugin.navItems ?? [])

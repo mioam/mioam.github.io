@@ -8,7 +8,7 @@ const route = useRoute()
 
 const breadcrumbs = computed(() => {
   const items = route.matched
-    .filter(record => record.meta?.breadcrumb)
+    .filter((record) => record.meta?.breadcrumb)
     .map((record, index, records) => {
       const raw = record.meta.breadcrumb as BreadcrumbValue
       const title = typeof raw === 'function' ? raw(route) : raw
@@ -26,8 +26,10 @@ const breadcrumbs = computed(() => {
     trail.push({ path: '/blog', title: 'Blog', isLast: false })
   }
 
-  return [...trail, ...items.filter(item => item.path !== '/')]
-    .filter((item, index, records) => records.findIndex(record => record.path === item.path) === index)
+  return [...trail, ...items.filter((item) => item.path !== '/')]
+    .filter(
+      (item, index, records) => records.findIndex((record) => record.path === item.path) === index
+    )
     .map((item, index, records) => ({
       ...item,
       isLast: index === records.length - 1,
@@ -75,13 +77,13 @@ const breadcrumbs = computed(() => {
 }
 
 .auto-breadcrumb a,
-.auto-breadcrumb span[aria-current="page"] {
+.auto-breadcrumb span[aria-current='page'] {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.auto-breadcrumb span[aria-current="page"] {
+.auto-breadcrumb span[aria-current='page'] {
   color: var(--accent);
 }
 </style>

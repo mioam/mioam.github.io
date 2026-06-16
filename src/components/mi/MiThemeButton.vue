@@ -41,18 +41,17 @@ watch(
   (nextTheme) => {
     document.documentElement.dataset.theme = nextTheme
   },
-  { immediate: true },
+  { immediate: true }
 )
 </script>
 
 <template>
-    <button class="theme-button" type="button" @click="toggleTheme">
-        {{ isDark ? 'Light' : 'Dark' }}
-    </button>
+  <button class="theme-button" type="button" @click="toggleTheme">
+    {{ isDark ? 'Light' : 'Dark' }}
+  </button>
 </template>
 
 <style scoped>
-
 .theme-button {
   display: inline-flex;
   align-items: center;
@@ -69,5 +68,4 @@ watch(
 .theme-button:hover {
   border-color: var(--accent);
 }
-
 </style>

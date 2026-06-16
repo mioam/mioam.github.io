@@ -28,9 +28,7 @@ onMounted(async () => {
   </MiCard>
 
   <MiCard v-else as="article" class="page">
-    <template #label>
-      {{ post.date }} · {{ post.readingTime }}
-    </template>
+    <template #label> {{ post.date }} · {{ post.readingTime }} </template>
     <template #heading>
       {{ post.title }}
     </template>

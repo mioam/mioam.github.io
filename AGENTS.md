@@ -23,6 +23,7 @@ pnpm install
 pnpm dev
 pnpm build
 pnpm preview
+pnpm format
 ```
 
 不要添加 `npm`、`yarn`、`bun` 的 lockfile。
@@ -210,6 +211,18 @@ token 由用户手动提供，默认只保存在 `sessionStorage`。除非用户
 
 `src/plugins/blog/views/BlogEditorView.vue` 当前是空壳，保存流程还未接入。
 
+## 代码格式
+
+项目使用 Prettier 统一代码风格，配置位于 `.prettierrc`。
+
+提交前应在变更文件上运行：
+
+```bash
+pnpm format
+```
+
+该命令会格式化 `src/` 目录下所有文件。IDE 已配置自动格式化的开发者仍需保证最终提交与 `pnpm format` 结果一致。
+
 ## TypeScript
 
 保持 TypeScript strict。
@@ -242,8 +255,9 @@ token 由用户手动提供，默认只保存在 `sessionStorage`。除非用户
 ## 当前已知的技术债（需要后续处理）
 
 1. `src/api/post.ts` 已删除 `console.log` 并修正 `FileInfo.date` 类型为 `string`。baseURL 保持硬编码常量，这是当前选定的方案。
-2. `src/plugins/blog/source.ts` 把解析、frontmatter、阅读时间混在一个文件里；输出 HTML 未做 sanitize；返回的 `PostDetail` 缺少 `description`/`tags`/`sourcePath`。
-3. `src/plugins/blog/views/BlogPostView.vue` 直接用 `v-html` 注入未消毒的 HTML；`!post` 同时覆盖了 loading 和 404 状态。
-4. `src/components/mi/MiList.vue` 命名、CSS 类、slot、emit 不一致，且没有使用语义化的列表标签。
+2. `src/plugins/blog/source.ts` 已拆分为 `frontmatter.ts` / `readingTime.ts` / `source.ts`；已启用 `rehype-sanitize`；`PostDetail` 已补全 `description`/`tags`/`sourcePath`。
+3. `src/plugins/blog/views/BlogPostView.vue` 已拆分 loading / 404 / content 三种状态，并通过 `rehype-sanitize` 对 `v-html` 内容消毒。
+4. `src/components/mi/MiList.vue` 已统一为 `.mi-list*` 类名，改用语义化 `<ul>/<li>`，移除了不合理的 `id` 约束与未使用的装饰性动画。
 5. `src/plugins/blog/views/BlogEditorView.vue` 是空的，编辑/新建功能未实现。
 6. `src/styles/main.css` 中 `* { transition: var(--theme-transition); }` 范围过大，容易引起性能抖动。
+7. 文章正文（`v-html`）缺少 Markdown 渲染样式，需要补充轻量 `.prose` 排版。

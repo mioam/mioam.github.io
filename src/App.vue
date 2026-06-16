@@ -18,7 +18,7 @@ import MiThemeButton from './components/mi/MiThemeButton.vue'
             {{ item.label }}
           </RouterLink>
         </nav>
-        <MiThemeButton/>
+        <MiThemeButton />
       </div>
     </header>
 
@@ -74,7 +74,6 @@ import MiThemeButton from './components/mi/MiThemeButton.vue'
 .site-nav a.router-link-active {
   color: var(--accent);
 }
-
 
 .site-main {
   padding-block: var(--space-5) 4rem;

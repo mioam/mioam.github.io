@@ -22,5 +22,6 @@ const url = ref('')
 <style scoped>
 .embed-frame {
   width: 100%;
-  min-height: 70vh;}
+  min-height: 70vh;
+}
 </style>

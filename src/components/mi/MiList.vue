@@ -1,10 +1,6 @@
 <template>
   <ul class="mi-list">
-    <li
-      v-for="(item, index) in items"
-      :key="itemKey(item, index)"
-      class="mi-list__item"
-    >
+    <li v-for="(item, index) in items" :key="itemKey(item, index)" class="mi-list__item">
       <slot :item="item" :index="index" />
     </li>
   </ul>

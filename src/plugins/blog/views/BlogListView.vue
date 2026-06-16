@@ -14,12 +14,8 @@ onMounted(async () => {
 
 <template>
   <MiCard class="page">
-    <template #label>
-      Blog
-    </template>
-    <template #heading>
-      文章
-    </template>
+    <template #label> Blog </template>
+    <template #heading> 文章 </template>
     <template #actions>
       <RouterLink class="text-action" to="/blog/new">写文章</RouterLink>
     </template>
@@ -36,12 +32,11 @@ onMounted(async () => {
         </RouterLink>
       </template>
     </MiList>
-
   </MiCard>
 </template>
 
 <style scoped>
-.post-link:hover>.title {
+.post-link:hover > .title {
   color: var(--accent);
 }
 

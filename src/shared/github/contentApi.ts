@@ -28,21 +28,24 @@ const apiBase = 'https://api.github.com'
 export async function saveMarkdownFile(input: SaveMarkdownInput): Promise<GitHubContentResponse> {
   const filePath = joinPath(input.config.postsPath, input.path)
   const current = await getExistingFile(input.token, input.config, filePath)
-  const response = await fetch(`${apiBase}/repos/${input.config.owner}/${input.config.repo}/contents/${filePath}`, {
-    method: 'PUT',
-    headers: {
-      Accept: 'application/vnd.github+json',
-      Authorization: `Bearer ${input.token}`,
-      'Content-Type': 'application/json',
-      'X-GitHub-Api-Version': '2022-11-28',
-    },
-    body: JSON.stringify({
-      message: input.message,
-      content: toBase64(input.content),
-      branch: input.config.branch,
-      ...(current?.sha ? { sha: current.sha } : {}),
-    }),
-  })
+  const response = await fetch(
+    `${apiBase}/repos/${input.config.owner}/${input.config.repo}/contents/${filePath}`,
+    {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/vnd.github+json',
+        Authorization: `Bearer ${input.token}`,
+        'Content-Type': 'application/json',
+        'X-GitHub-Api-Version': '2022-11-28',
+      },
+      body: JSON.stringify({
+        message: input.message,
+        content: toBase64(input.content),
+        branch: input.config.branch,
+        ...(current?.sha ? { sha: current.sha } : {}),
+      }),
+    }
+  )
 
   if (!response.ok) {
     throw new Error(await toGitHubError(response))
@@ -54,7 +57,7 @@ export async function saveMarkdownFile(input: SaveMarkdownInput): Promise<GitHub
 async function getExistingFile(
   token: string,
   config: GitHubRepoConfig,
-  filePath: string,
+  filePath: string
 ): Promise<GitHubContentResponse | undefined> {
   const url = `${apiBase}/repos/${config.owner}/${config.repo}/contents/${filePath}?ref=${encodeURIComponent(config.branch)}`
   const response = await fetch(url, {
@@ -79,7 +82,9 @@ async function getExistingFile(
 async function toGitHubError(response: Response): Promise<string> {
   try {
     const body = (await response.json()) as { message?: string }
-    return body.message ? `GitHub API error: ${body.message}` : `GitHub API error: ${response.status}`
+    return body.message
+      ? `GitHub API error: ${body.message}`
+      : `GitHub API error: ${response.status}`
   } catch {
     return `GitHub API error: ${response.status}`
   }

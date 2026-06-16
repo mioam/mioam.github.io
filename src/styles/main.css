@@ -1,6 +1,6 @@
 :root {
   background: var(--background);
-  font-family: "Aptos", "Segoe UI", "Helvetica Neue", "PingFang SC", sans-serif;
+  font-family: 'Aptos', 'Segoe UI', 'Helvetica Neue', 'PingFang SC', sans-serif;
   font-size: clamp(15px, 0.28vw + 14px, 16px);
   font-weight: 400;
   font-synthesis: none;
@@ -17,11 +17,7 @@
 
   --radius: 1rem;
 
-  --theme-transition:
-    color 200ms ,
-    background-color 200ms ,
-    border-color 200ms ,
-    box-shadow 200ms ;
+  --theme-transition: color 200ms, background-color 200ms, border-color 200ms, box-shadow 200ms;
   /* transition: var(--theme-transition); */
 }
 
@@ -29,7 +25,7 @@
   transition: var(--theme-transition);
 }
 
-:root[data-theme="light"] {
+:root[data-theme='light'] {
   color-scheme: light;
   color: #17202b;
 
@@ -41,12 +37,12 @@
   --shadow: 0 1rem 3rem rgb(28 61 93 / 7%);
 }
 
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   color-scheme: dark;
-  color: #DADADA;
+  color: #dadada;
   /* background: #101317; */
   --background: #101317;
-  --text: #DADADA;
+  --text: #dadada;
   --muted: #99a8b8;
   --border: #2a343f;
   --accent: #87bfec;
@@ -71,17 +67,29 @@ a {
 }
 
 h1,
-h2{
+h2 {
   color: var(--text);
   font-weight: 300;
 }
 
-h1 { font-size: 2.4rem; }
-h2 { font-size: 2rem; }
-h3 { font-size: 1.5rem; }
-h4 { font-size: 1.25rem; }
-h5 { font-size: 1.125rem; }
-h6 { font-size: 1rem; }
+h1 {
+  font-size: 2.4rem;
+}
+h2 {
+  font-size: 2rem;
+}
+h3 {
+  font-size: 1.5rem;
+}
+h4 {
+  font-size: 1.25rem;
+}
+h5 {
+  font-size: 1.125rem;
+}
+h6 {
+  font-size: 1rem;
+}
 
 p {
   margin-block: 0 1em;
@@ -102,7 +110,7 @@ code,
 kbd,
 samp,
 pre {
-  font-family: "Cascadia Code", "Consolas", monospace;
+  font-family: 'Cascadia Code', 'Consolas', monospace;
   font-size: 0.92em;
 }
 
@@ -114,14 +122,12 @@ select {
   letter-spacing: 0;
 }
 
-
-
 [data-theme='dark'] .shiki,
 [data-theme='dark'] .shiki span {
-    color: var(--shiki-dark) !important;
-    background-color: var(--shiki-dark-bg) !important;
-    /* Optional, if you also want font styles */
-    font-style: var(--shiki-dark-font-style) !important;
-    font-weight: var(--shiki-dark-font-weight) !important;
-    text-decoration: var(--shiki-dark-text-decoration) !important;
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+  /* Optional, if you also want font styles */
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
 }
