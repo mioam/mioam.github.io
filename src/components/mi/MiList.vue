@@ -1,54 +1,45 @@
-<!-- ZenList.vue -->
 <template>
-  <div class="zen-list">
-    <div v-for="(item, index) in items" :key="item.id ?? `zen-${index}`" class="item">
-
-      <div class="zen-body">
-        <slot name="default" :item="item" :index="index">
-        </slot>
-      </div>
-
-    </div>
-  </div>
+  <ul class="mi-list">
+    <li
+      v-for="(item, index) in items"
+      :key="itemKey(item, index)"
+      class="mi-list__item"
+    >
+      <slot :item="item" :index="index" />
+    </li>
+  </ul>
 </template>
 
-<script setup lang="ts" generic="T extends { id?: string | number }">
+<script setup lang="ts" generic="T">
 defineProps<{
   items: T[]
 }>()
+
 defineSlots<{
   default(props: { item: T; index: number }): any
 }>()
-defineEmits(['itemClick'])
+
+function itemKey(item: unknown, index: number): string | number {
+  const withId = item as { id?: string | number }
+  return withId.id ?? index
+}
 </script>
 
 <style scoped>
-.zen-list {
+.mi-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   color: var(--text);
   width: 100%;
-  position: relative;
 }
 
-/* 核心 Item */
-.zen-list__item {
+.mi-list__item {
   padding-bottom: var(--space-2);
-  display: flex;
-  align-items: center;
-  position: relative;
-  cursor: default;
-  background: transparent;
-  transition:
-    transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  z-index: 1;
 }
 
-/* Hover：向上抽离悬浮 */
-.item:hover {
-  transform: translateY(-3px);
-  z-index: 10;
-}
-
-.item:hover>*>.title {
-  color: var(--accent)
+.mi-list__item + .mi-list__item {
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-2);
 }
 </style>

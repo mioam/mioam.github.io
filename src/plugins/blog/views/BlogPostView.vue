@@ -1,20 +1,29 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import MiCard from '@/components/mi/MiCard.vue'
 import { parseMarkdown } from '../source'
-import { PostDetail } from '../types'
+import type { PostDetail } from '../types'
 
 const route = useRoute()
-const post = ref<PostDetail>()
+const post = ref<PostDetail | null>(null)
+const loading = ref(true)
 
 onMounted(async () => {
-  post.value = await parseMarkdown(String(route.params.slug))
+  try {
+    post.value = await parseMarkdown(String(route.params.slug))
+  } finally {
+    loading.value = false
+  }
 })
 </script>
 
 <template>
-  <MiCard v-if="!post" class="page">
+  <MiCard v-if="loading" class="page">
+    <p class="muted">加载中...</p>
+  </MiCard>
+
+  <MiCard v-else-if="!post" class="page">
     <el-empty description="文章不存在。" />
   </MiCard>
 

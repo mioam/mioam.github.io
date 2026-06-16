@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import MiCard from '@/components/mi/MiCard.vue'
-import { getList } from '@/api/post'
-import type { FileInfo } from '@/api/post'
 import MiList from '@/components/mi/MiList.vue'
 import { onMounted, ref } from 'vue'
+import { getPostSummaries } from '../source'
+import type { PostSummary } from '../types'
 
-
-const posts = ref<FileInfo[]>([])
+const posts = ref<PostSummary[]>([])
 
 onMounted(async () => {
-  posts.value = await getList()
-  console.log(posts)
+  posts.value = await getPostSummaries()
 })
 </script>
 
@@ -31,7 +29,7 @@ onMounted(async () => {
       <template #default="{ item }">
         <RouterLink class="post-link" :to="`/blog/${item.slug}`">
           <h2 class="title">{{ item.title }}</h2>
-          <p class="muted">{{ item.summary }}</p>
+          <p class="muted">{{ item.description }}</p>
           <div class="muted meta">
             <span>{{ item.date }}</span>
           </div>
