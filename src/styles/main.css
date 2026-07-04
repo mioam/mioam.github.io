@@ -1,5 +1,4 @@
 :root {
-  background: var(--background);
   font-family: 'Aptos', 'Segoe UI', 'Helvetica Neue', 'PingFang SC', sans-serif;
   font-size: clamp(15px, 0.28vw + 14px, 16px);
   font-weight: 400;
@@ -7,7 +6,6 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   --stage-width: 1024px;
-  /* --rail-width: 132px; */
   --gutter: clamp(16px, 4vw, 32px);
   --space-1: 0.35rem;
   --space-2: 0.65rem;
@@ -18,10 +16,16 @@
   --radius: 1rem;
 
   --theme-transition: color 200ms, background-color 200ms, border-color 200ms, box-shadow 200ms;
-  /* transition: var(--theme-transition); */
 }
 
-* {
+:root,
+body,
+a,
+button,
+input,
+textarea,
+select,
+.mi-card {
   transition: var(--theme-transition);
 }
 
@@ -40,7 +44,6 @@
 :root[data-theme='dark'] {
   color-scheme: dark;
   color: #dadada;
-  /* background: #101317; */
   --background: #101317;
   --text: #dadada;
   --muted: #99a8b8;
@@ -57,8 +60,6 @@ body {
   margin: 0;
   color: var(--text);
   background: var(--background);
-  /* font-weight: 400; */
-  /* line-height: 1.7; */
 }
 
 a {
@@ -80,15 +81,19 @@ h2 {
 }
 h3 {
   font-size: 1.5rem;
+  font-weight: bold;
 }
 h4 {
   font-size: 1.25rem;
+  font-weight: bold;
 }
 h5 {
   font-size: 1.125rem;
+  font-weight: bold;
 }
 h6 {
   font-size: 1rem;
+  font-weight: bold;
 }
 
 p {
@@ -100,9 +105,8 @@ b {
   font-weight: 500;
 }
 
-small,
-.meta,
 .muted {
+  color: var(--muted);
   font-size: 0.875rem;
 }
 

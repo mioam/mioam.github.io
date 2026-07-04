@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import AutoBreadcrumb from './components/AutoBreadcrumb.vue'
+import MiBreadcrumb from './components/MiBreadcrumb.vue'
 import { navItems } from './app/plugins'
-import MiThemeButton from './components/mi/MiThemeButton.vue'
+import MiThemeButton from './components/MiThemeButton.vue'
 </script>
 
 <template>
@@ -9,7 +9,7 @@ import MiThemeButton from './components/mi/MiThemeButton.vue'
     <header class="site-header">
       <div class="header-left">
         <RouterLink class="brand" to="/">Minimal Site</RouterLink>
-        <AutoBreadcrumb />
+        <MiBreadcrumb />
       </div>
 
       <div class="header-actions">
@@ -68,7 +68,7 @@ import MiThemeButton from './components/mi/MiThemeButton.vue'
   flex-wrap: wrap;
   gap: var(--space-2);
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
 }
 
 .site-nav a.router-link-active {
@@ -76,6 +76,6 @@ import MiThemeButton from './components/mi/MiThemeButton.vue'
 }
 
 .site-main {
-  padding-block: var(--space-5) 4rem;
+  padding-block: var(--space-5) 0;
 }
 </style>

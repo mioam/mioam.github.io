@@ -1,12 +1,20 @@
 <script setup lang="ts">
 import { useAttrs, useSlots } from 'vue'
 
-withDefaults(
+/**
+ * MiCard - 通用内容卡片容器。
+ *
+ * 提供 label、heading、actions、default、foot 五个插槽，
+ * 支持自定义根元素标签和标题层级。
+ */
+const props = withDefaults(
   defineProps<{
     as?: string
+    headingLevel?: 'h1' | 'h2'
   }>(),
   {
     as: 'article',
+    headingLevel: 'h2',
   }
 )
 
@@ -19,7 +27,7 @@ const slots = useSlots()
 </script>
 
 <template>
-  <Transition name="zen" appear>
+  <Transition name="ani" appear>
     <component :is="as" class="card" v-bind="attrs">
       <div class="card_main">
         <div v-if="slots.label || slots.heading || slots.actions" class="card_header">
@@ -27,15 +35,17 @@ const slots = useSlots()
             <p v-if="slots.label" class="card_label">
               <slot name="label" />
             </p>
-            <h1 v-if="slots.heading" class="card_heading">
+            <component :is="headingLevel" v-if="slots.heading" class="card_heading">
               <slot name="heading" />
-            </h1>
+            </component>
           </div>
           <div v-if="slots.actions" class="card_actions">
             <slot name="actions" />
           </div>
         </div>
-        <div class="card_body"><slot /></div>
+        <div v-if="slots.default" class="card_body">
+          <slot />
+        </div>
         <footer v-if="slots.foot" class="card_foot">
           <slot name="foot" />
         </footer>
@@ -49,18 +59,16 @@ const slots = useSlots()
   display: flex;
   gap: 2rem;
   align-items: stretch;
-  /* max-width: 28rem; */
   padding: 2.5rem 2.5rem 2.5rem 0;
   color: var(--text);
-  /* background: var(--surface); */
   line-height: 1.7;
 }
 
 .card::before {
   content: '';
-  width: 1px;
+  width: 2px;
   background: var(--border);
-  flex-shrink: 0;
+  transform-origin: top;
 }
 
 .card_main {
@@ -88,7 +96,6 @@ const slots = useSlots()
 }
 
 .card_heading {
-  /* font-size: 2rem; */
   line-height: 2.5rem;
   margin: 0.25rem 0 0;
 }
@@ -105,29 +112,28 @@ const slots = useSlots()
   margin-top: 1.5rem;
 }
 
-.card_body:empty {
-  display: none;
-}
-
 .card_foot {
   padding-top: 1.25rem;
   font-size: 0.75rem;
   color: var(--muted);
 }
 
-.zen-enter-active {
+.ani-enter-active::before {
+  transition: transform 0.5s;
+}
+
+.ani-enter-active .card_main {
   transition:
-    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    transform 1s,
+    opacity 1s;
 }
 
-.zen-enter-from {
+.ani-enter-from::before {
+  transform: scaleY(0);
+}
+
+.ani-enter-from .card_main {
   opacity: 0;
-  transform: translateY(3rem);
-}
-
-.zen-enter-to {
-  opacity: 1;
-  transform: translateY(0);
+  transform: translateY(1rem);
 }
 </style>

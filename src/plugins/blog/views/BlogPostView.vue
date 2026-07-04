@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import MiCard from '@/components/mi/MiCard.vue'
+import MiCard from '@/components/MiCard.vue'
 import { parseMarkdown } from '../source'
 import type { PostDetail } from '../types'
 
@@ -19,15 +19,15 @@ onMounted(async () => {
 </script>
 
 <template>
-  <MiCard v-if="loading" class="page">
+  <MiCard v-if="loading">
     <p class="muted">加载中...</p>
   </MiCard>
 
-  <MiCard v-else-if="!post" class="page">
+  <MiCard v-else-if="!post">
     <el-empty description="文章不存在。" />
   </MiCard>
 
-  <MiCard v-else as="article" class="page">
+  <MiCard v-else as="article" headingLevel="h1">
     <template #label> {{ post.date }} · {{ post.readingTime }} </template>
     <template #heading>
       {{ post.title }}
@@ -35,6 +35,6 @@ onMounted(async () => {
     <template #actions>
       <RouterLink class="text-action" :to="`/blog/${post.slug}/edit`">编辑</RouterLink>
     </template>
-    <div v-html="post.content" />
+    <div class="markdown-body" v-html="post.content" />
   </MiCard>
 </template>

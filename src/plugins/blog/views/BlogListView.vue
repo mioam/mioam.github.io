@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import MiCard from '@/components/mi/MiCard.vue'
-import MiList from '@/components/mi/MiList.vue'
+import MiCard from '@/components/MiCard.vue'
+import MiList from '@/components/MiList.vue'
 import { onMounted, ref } from 'vue'
 import { getPostSummaries } from '../source'
 import type { PostSummary } from '../types'
@@ -13,7 +13,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <MiCard class="page">
+  <MiCard headingLevel="h1">
     <template #label> Blog </template>
     <template #heading> 文章 </template>
     <template #actions>
@@ -36,7 +36,11 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.post-link:hover > .title {
+.title {
+  margin: 0;
+}
+
+.post-link:hover>.title {
   color: var(--accent);
 }
 

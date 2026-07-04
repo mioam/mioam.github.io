@@ -11,37 +11,28 @@ const breadcrumbs = computed(() => {
     .filter((record) => record.meta?.breadcrumb)
     .map((record, index, records) => {
       const raw = record.meta.breadcrumb as BreadcrumbValue
-      const title = typeof raw === 'function' ? raw(route) : raw
+      const title = typeof raw === 'function' ? raw(route) : String(raw ?? '')
 
       return {
         path: index === records.length - 1 ? route.path : record.path,
         title,
-        isLast: index === records.length - 1,
       }
     })
 
-  const trail = [{ path: '/', title: 'Home', isLast: false }]
+  const trail = [{ path: '/', title: 'Home' }]
 
-  if (route.path.startsWith('/blog') && route.path !== '/blog') {
-    trail.push({ path: '/blog', title: 'Blog', isLast: false })
-  }
-
-  return [...trail, ...items.filter((item) => item.path !== '/')]
-    .filter(
-      (item, index, records) => records.findIndex((record) => record.path === item.path) === index
-    )
-    .map((item, index, records) => ({
-      ...item,
-      isLast: index === records.length - 1,
-    }))
+  return [...trail, ...items.filter((item) => item.path !== '/')].map((item, index, records) => ({
+    ...item,
+    isLast: index === records.length - 1,
+  }))
 })
 </script>
 
 <template>
-  <nav class="auto-breadcrumb" aria-label="Breadcrumb">
+  <nav class="mi-breadcrumb" aria-label="Breadcrumb">
     <ol>
       <li v-for="item in breadcrumbs" :key="item.path">
-        <RouterLink v-if="!item.isLast" :to="{ path: item.path }">
+        <RouterLink v-if="!item.isLast" :to="item.path">
           {{ item.title }}
         </RouterLink>
         <span v-else aria-current="page">{{ item.title }}</span>
@@ -52,38 +43,36 @@ const breadcrumbs = computed(() => {
 </template>
 
 <style scoped>
-.auto-breadcrumb {
-  min-width: 0;
+.mi-breadcrumb {
   color: var(--muted);
   font-size: 0.8rem;
 }
 
-.auto-breadcrumb ol,
-.auto-breadcrumb li {
+.mi-breadcrumb ol,
+.mi-breadcrumb li {
   display: flex;
   align-items: center;
-  min-width: 0;
 }
 
-.auto-breadcrumb ol {
+.mi-breadcrumb ol {
   gap: 0.35rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.auto-breadcrumb li {
+.mi-breadcrumb li {
   gap: 0.35rem;
 }
 
-.auto-breadcrumb a,
-.auto-breadcrumb span[aria-current='page'] {
+.mi-breadcrumb a,
+.mi-breadcrumb span[aria-current='page'] {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.auto-breadcrumb span[aria-current='page'] {
+.mi-breadcrumb span[aria-current='page'] {
   color: var(--accent);
 }
 </style>

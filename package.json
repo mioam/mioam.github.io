@@ -10,6 +10,7 @@
     "format": "prettier --write --cache src/"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
     "@shikijs/rehype": "^4.2.0",
     "axios": "^1.17.0",
     "element-plus": "^2.11.5",

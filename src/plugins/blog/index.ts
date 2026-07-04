@@ -12,27 +12,32 @@ export const blogPlugin: AppPlugin = {
   routes: [
     {
       path: '/blog',
-      name: 'blog',
-      component: () => import('./views/BlogListView.vue'),
       meta: { breadcrumb: 'Blog' },
-    },
-    {
-      path: '/blog/new',
-      name: 'blog-new',
-      component: () => import('./views/BlogEditorView.vue'),
-      meta: { breadcrumb: 'New' },
-    },
-    {
-      path: '/blog/:slug/edit',
-      name: 'blog-edit',
-      component: () => import('./views/BlogEditorView.vue'),
-      meta: { breadcrumb: 'Edit' },
-    },
-    {
-      path: '/blog/:slug',
-      name: 'blog-post',
-      component: () => import('./views/BlogPostView.vue'),
-      meta: { breadcrumb: postBreadcrumb },
+      children: [
+        {
+          path: '',
+          name: 'blog',
+          component: () => import('./views/BlogListView.vue'),
+        },
+        {
+          path: 'new',
+          name: 'blog-new',
+          component: () => import('./views/BlogEditorView.vue'),
+          meta: { breadcrumb: 'New' },
+        },
+        {
+          path: ':slug/edit',
+          name: 'blog-edit',
+          component: () => import('./views/BlogEditorView.vue'),
+          meta: { breadcrumb: 'Edit' },
+        },
+        {
+          path: ':slug',
+          name: 'blog-post',
+          component: () => import('./views/BlogPostView.vue'),
+          meta: { breadcrumb: postBreadcrumb },
+        },
+      ],
     },
   ],
 }

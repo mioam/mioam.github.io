@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import MiCard from '@/components/mi/MiCard.vue'
+import MiCard from '@/components/MiCard.vue'
 
 const url = ref('')
 </script>

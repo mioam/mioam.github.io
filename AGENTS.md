@@ -1,22 +1,25 @@
 # AGENTS.md
 
+## 沟通约定
+
+- 后续协作默认使用**中文**回复。
+- 代码标识、命令、路径、接口名保持英文。
+
 ## 项目定位
 
-这是一个使用 `Vue 3 + TypeScript + Vite + pnpm` 构建的极简、可扩展个人站点。
-
-后续协作默认使用中文回复。代码标识、命令、路径、接口名保持英文。
+使用 `Vue 3 + TypeScript + Vite + pnpm` 构建的极简、可扩展个人站点。
 
 核心目标：
 
 - 前端视觉保持克制、简洁、易修改。
 - 用插件架构承载可选功能。
 - 支持 GitHub Pages 静态部署。
-- 博客文章目前从一个远程静态 API 读取。
+- 博客文章从远程静态 API 读取。
 - 通过 GitHub Contents API 保存博客编辑结果。
 
 ## 常用命令
 
-只能使用 `pnpm`。
+只能使用 `pnpm`：
 
 ```bash
 pnpm install
@@ -30,21 +33,20 @@ pnpm format
 
 ## 部署与路由
 
-站点通过 `.github/workflows/deploy.yml` 部署到 GitHub Pages。
+- 站点通过 `.github/workflows/deploy.yml` 部署到 GitHub Pages。
+- 路由使用 Vue Router history 模式：
 
-路由使用 Vue Router history 模式：
+  ```ts
+  createWebHistory(import.meta.env.BASE_URL)
+  ```
 
-```ts
-createWebHistory(import.meta.env.BASE_URL)
-```
+- GitHub Pages 深层路径刷新依赖 404 fallback：
 
-GitHub Pages 深层路径刷新依赖 404 fallback：
+  ```bash
+  dist/index.html -> dist/404.html
+  ```
 
-```bash
-dist/index.html -> dist/404.html
-```
-
-不要改成 hash 路由，除非用户明确要求。
+- 不要改成 hash 路由，除非用户明确要求。
 
 ## 架构约定
 
@@ -56,11 +58,7 @@ dist/index.html -> dist/404.html
 - `src/app/plugins.ts`：插件注册表。
 - `src/app/router.ts`：路由组装。
 
-功能插件放在：
-
-```text
-src/plugins/<plugin-name>/
-```
+功能插件放在 `src/plugins/<plugin-name>/`。
 
 每个插件导出一个 `AppPlugin`，包含：
 
@@ -84,9 +82,10 @@ src/plugins/<plugin-name>/
 
 当前已有视觉组件：
 
-- `src/components/mi/MiCard.vue`
-- `src/components/mi/MiList.vue`
-- `src/components/mi/MiThemeButton.vue`
+- `src/components/MiBreadcrumb.vue`
+- `src/components/MiCard.vue`
+- `src/components/MiList.vue`
+- `src/components/MiThemeButton.vue`
 
 卡片规则：
 
@@ -137,11 +136,7 @@ src/plugins/<plugin-name>/
 
 ## 样式约定
 
-全局样式位于：
-
-```text
-src/styles/main.css
-```
+全局样式位于 `src/styles/main.css`。
 
 新增样式前，优先复用已有工具类：
 
@@ -156,66 +151,13 @@ src/styles/main.css
 
 不要把 layout 用的 inline style 写进 Vue 模板。需要复用的布局语义放进 CSS class。
 
-## 博客约定
-
-博客数据源使用远程静态 API，逻辑位于：
-
-```text
-src/api/post.ts
-```
-
-它通过 axios 请求远程静态站点，默认读取：
-
-- 文章列表：`/file_list.json`
-- 单篇文章：`/md/<slug>.md`
-
-远程数据源是当前架构的** intentional 选择**，不要改成本地 `src/content/posts/*.md`，除非用户明确要求。
-
-远程站点的 baseURL 当前以常量形式硬编码在 `src/api/post.ts` 中。这是一个刻意的务实选择：静态站点没有运行时配置能力，引入 env/JSON 配置层目前收益不大。如果需要更换远程源，直接修改该常量后重新构建。
-
-Markdown 解析和 frontmatter 提取目前内联在：
-
-```text
-src/plugins/blog/source.ts
-```
-
-它使用 `unified` + `remark` + `rehype` 管线，支持 GFM、KaTeX 数学公式、Shiki 代码高亮。
-
-以下文件目前**不存在**，不要假设它们已经实现：
-
-```text
-src/shared/markdown/frontmatter.ts
-src/shared/markdown/toc.ts
-```
-
-文章页目录（TOC）和 frontmatter 序列化也尚未实现。
-
-## GitHub 编辑
-
-博客编辑通过 GitHub Contents API 写回 Markdown：
-
-```text
-src/shared/github/contentApi.ts
-```
-
-不要硬编码 token。
-
-编辑器从 Vite 环境变量读取默认仓库配置：
-
-- `VITE_GITHUB_OWNER`
-- `VITE_GITHUB_REPO`
-- `VITE_GITHUB_BRANCH`
-- `VITE_GITHUB_POSTS_PATH`
-
-token 由用户手动提供，默认只保存在 `sessionStorage`。除非用户明确要求，不要引入 OAuth 或后端鉴权流程。
-
-`src/plugins/blog/views/BlogEditorView.vue` 当前是空壳，保存流程还未接入。
+主题过渡已收敛到 `:root, body, a, button, input, textarea, select, .mi-card`，不要再使用 `* { transition: ... }`。
 
 ## 代码格式
 
 项目使用 Prettier 统一代码风格，配置位于 `.prettierrc`。
 
-提交前应在变更文件上运行：
+提交前在变更文件上运行：
 
 ```bash
 pnpm format
@@ -225,15 +167,12 @@ pnpm format
 
 ## TypeScript
 
-保持 TypeScript strict。
-
-插件、博客、API 边界优先使用显式 interface/type。
+- 保持 TypeScript strict。
+- 插件、博客、API 边界优先使用显式 interface/type。
 
 ## 依赖策略
 
-依赖要保守。
-
-新增 package 前先确认是否能用以下内容解决：
+依赖要保守。新增 package 前先确认是否能用以下内容解决：
 
 - Vue
 - Vue Router
@@ -242,6 +181,44 @@ pnpm format
 - 原生 TypeScript
 
 除非用户明确要求，不要添加状态管理库、动画库、CSS 框架、自动导入工具。
+
+## 博客约定
+
+博客数据源使用远程静态 API，逻辑位于 `src/api/post.ts`。
+
+默认读取：
+
+- 文章列表：`/file_list.json`
+- 单篇文章：`/md/<slug>.md`
+
+远程数据源是当前架构的** intentional 选择**，不要改成本地 `src/content/posts/*.md`，除非用户明确要求。
+
+远程站点的 `baseURL` 以常量形式硬编码在 `src/api/post.ts` 中。如需更换远程源，直接修改该常量后重新构建。
+
+Markdown 解析管线位于 `src/plugins/blog/source.ts`，使用 `unified` + `remark` + `rehype`，支持 GFM、KaTeX 数学公式、Shiki 代码高亮，并已启用 `rehype-sanitize`。
+
+`src/plugins/blog/types.ts` 定义了 `PostSummary` 与 `PostDetail`，数据模型统一使用这两个类型。
+
+以下功能尚未实现：
+
+- 文章页目录（TOC）
+- frontmatter 序列化
+- `BlogEditorView.vue` 的编辑/新建/保存流程
+
+## GitHub 编辑
+
+博客编辑通过 GitHub Contents API 写回 Markdown，逻辑位于 `src/shared/github/contentApi.ts`。
+
+- 不要硬编码 token。
+- 编辑器从 Vite 环境变量读取默认仓库配置：
+
+  - `VITE_GITHUB_OWNER`
+  - `VITE_GITHUB_REPO`
+  - `VITE_GITHUB_BRANCH`
+  - `VITE_GITHUB_POSTS_PATH`
+
+- token 由用户手动提供，默认只保存在 `sessionStorage`。
+- 除非用户明确要求，不要引入 OAuth 或后端鉴权流程。
 
 ## 生成文件
 
@@ -252,12 +229,8 @@ pnpm format
 
 这些已经由 `.gitignore` 忽略。
 
-## 当前已知的技术债（需要后续处理）
+## 当前已知的技术债
 
-1. `src/api/post.ts` 已删除 `console.log` 并修正 `FileInfo.date` 类型为 `string`。baseURL 保持硬编码常量，这是当前选定的方案。
-2. `src/plugins/blog/source.ts` 已拆分为 `frontmatter.ts` / `readingTime.ts` / `source.ts`；已启用 `rehype-sanitize`；`PostDetail` 已补全 `description`/`tags`/`sourcePath`。
-3. `src/plugins/blog/views/BlogPostView.vue` 已拆分 loading / 404 / content 三种状态，并通过 `rehype-sanitize` 对 `v-html` 内容消毒。
-4. `src/components/mi/MiList.vue` 已统一为 `.mi-list*` 类名，改用语义化 `<ul>/<li>`，移除了不合理的 `id` 约束与未使用的装饰性动画。
-5. `src/plugins/blog/views/BlogEditorView.vue` 是空的，编辑/新建功能未实现。
-6. `src/styles/main.css` 中 `* { transition: var(--theme-transition); }` 范围过大，容易引起性能抖动。
-7. 文章正文（`v-html`）缺少 Markdown 渲染样式，需要补充轻量 `.prose` 排版。
+1. `src/plugins/blog/views/BlogEditorView.vue` 是空的，编辑/新建功能未实现。
+2. 文章页目录（TOC）与回到顶部尚未实现。
+3. `src/app` 目录命名存在歧义：与 `src/App.vue` 大小写冲突，且 `app` 语义空泛。`core` 等候选名也不合适，当前搁置，待后续决定。
